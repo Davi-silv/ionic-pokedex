@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Pokédex
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,12 +9,36 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">Pokédex</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-list *ngIf="!loading">
+    <ion-item *ngFor="let pokemon of pokemons">
+      <ion-avatar slot="start">
+        <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (getPokemonId(pokemon.url)) + '.png'" alt="{{pokemon.name}}" />
+      </ion-avatar>
+      <ion-label>{{ pokemon.name | titlecase }}</ion-label>
+      <ion-button fill="clear" color="danger" slot="end" (click)="toggleFavorite(pokemon.name)">
+        <ion-icon [name]="isFavorite(pokemon.name) ? 'heart' : 'heart-outline'"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" slot="end" [routerLink]="['/details', pokemon.name]">
+        Detalhes
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+
+  <ion-footer *ngIf="!loading">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="prevPage()" [disabled]="offset === 0">Anterior</ion-button>
+      </ion-buttons>
+      <ion-title>Página {{ (offset / limit) + 1 }} de {{ (total / limit) | ceil }}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="nextPage()" [disabled]="offset + limit >= total">Próxima</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-footer>
 </ion-content>
