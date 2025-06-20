@@ -1,13 +1,29 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>favorites</ion-title>
+    <ion-title>Favoritos</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">favorites</ion-title>
+      <ion-title size="large">Favoritos</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-list *ngIf="favorites.length > 0">
+    <ion-item *ngFor="let name of favorites">
+      <ion-avatar slot="start">
+        <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + name | pokemonIdFromName + '.png'" alt="{{name}}" />
+      </ion-avatar>
+      <ion-label>{{ name | titlecase }}</ion-label>
+      <ion-button fill="clear" color="danger" slot="end" (click)="removeFavorite(name)">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" slot="end" (click)="goToDetails(name)">
+        Detalhes
+      </ion-button>
+    </ion-item>
+  </ion-list>
+  <ion-text *ngIf="favorites.length === 0" color="medium">Nenhum Pokémon favorito.</ion-text>
 </ion-content>
